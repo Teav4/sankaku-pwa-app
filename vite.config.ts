@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import path from 'path'
 
 export default defineConfig({
   plugins: [
@@ -22,7 +23,19 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
-      }
+      },
     })
-  ]
+  ],
+  resolve: {
+    alias: { '@': path.resolve('./src') },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+          @import "@/styles/global.scss";
+          @import "@/styles/color.scss";`,
+      },
+    },
+  },
 })
