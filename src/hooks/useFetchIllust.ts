@@ -119,12 +119,7 @@ export function useFetchIllust(config: SearchIllustConfigProps) {
       const response = await axios.get<null, AxiosResponse<GetImageResponse>>(
         SEARCH_ILLUST,
         {
-          headers: {
-            dnd: 1,
-            origin: 'https://beta.sankakucomplex.com',
-            referer: 'https://beta.sankakucomplex.com/',
-            accept: 'application/vnd.sankaku.api+json;v=2'
-          },
+          headers: {},
           params: {
             lang: 'en',
             limit: limit,
@@ -143,6 +138,7 @@ export function useFetchIllust(config: SearchIllustConfigProps) {
       cacheTime: 15000,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
+      retry: 0,
       getNextPageParam: (lastPage) => lastPage.meta.next ?? ''
     }
   )

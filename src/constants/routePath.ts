@@ -1,3 +1,5 @@
 export const HOME = '/'
 export const LOGIN = '/login'
 export const NOT_FOUND = '/404'
+export const SEARCH = '/search'
+export const LOGOUT = '/logout'

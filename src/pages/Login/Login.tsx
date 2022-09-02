@@ -2,9 +2,12 @@ import * as React from 'react'
 import { Card, Grid, Text, Input, Button, Spacer } from '@nextui-org/react'
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons'
 import { useLogin } from '@/hooks/useLogin'
+import { useNavigate } from 'react-router-dom'
+import { SEARCH } from '@/constants/routePath'
 
 export function Login(): React.ReactElement {
   const [formData, setFormData] = React.useState({ username: '', password: '' })
+  const navigate = useNavigate()
   const { mutate } = useLogin()
 
   const handleUserNameChange = (e: React.ChangeEvent<any>) => {
@@ -23,6 +26,7 @@ export function Login(): React.ReactElement {
 
   const handleSubmitSignInBtn = () => {
     mutate(formData)
+    setTimeout(() => window.location.reload(), 2000)
   }
 
   return (
@@ -55,7 +59,7 @@ export function Login(): React.ReactElement {
             />
           </Card.Body>
           <Card.Footer>
-            <Button onPress={handleSubmitSignInBtn}>SignIn</Button>
+            <Button onPress={handleSubmitSignInBtn}>Sign In</Button>
           </Card.Footer>
         </Card>
       </Grid>

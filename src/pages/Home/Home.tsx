@@ -1,13 +1,22 @@
 import * as React from 'react'
-import { useFetchIllust } from '@/hooks/useFetchIllust'
-import { Grid, Card, Text, Image, Loading } from '@nextui-org/react'
+import { useFetchIllust, SearchIllustConfigProps } from '@/hooks/useFetchIllust'
+import { Grid, Card, Image, Modal, Button, Text } from '@nextui-org/react'
 import { useInView } from 'react-intersection-observer'
+import { useLocation, useSearchParams } from 'react-router-dom'
 
 interface ImageProps {
   url: string
   width: number
   height: number
 }
+
+type SelectOrderValue =
+  | 'popularity'
+  | 'date'
+  | 'quality'
+  | 'random'
+  | 'recently_favorited'
+  | 'recently_voted'
 
 const ImageItem = ({ url, width, height }: ImageProps) => {
   return (
@@ -25,24 +34,35 @@ const ImageItem = ({ url, width, height }: ImageProps) => {
 }
 
 export function Home() {
-  const {
-    data,
-    isLoading,
-    isFetching,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage
-  } = useFetchIllust({ tags: ['genshin_impact'], limit: 40 })
   const { ref, inView } = useInView()
+  const [visible, setVisible] = React.useState(true)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const tags = searchParams.get('tags')
+    ? searchParams.get('tags')?.split(' ')
+    : []
+  const orderBy =
+    (searchParams.get('order_by') as SelectOrderValue) || 'popularity'
+  const limit = searchParams.get('limit') || '20'
+
+  const { data, isFetching, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useFetchIllust({
+      tags,
+      limit: parseInt(limit),
+      order_by: orderBy
+    })
+
+  const closeBtn = () => {
+    setVisible(false)
+    console.log('close')
+  }
 
   React.useEffect(() => {
     if (inView) {
-      console.log(inView)
       fetchNextPage()
     }
   }, [inView])
 
-  console.log(data)
   return (
     <>
       {data?.pages.map((page, index) => (
