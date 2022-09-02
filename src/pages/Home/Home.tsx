@@ -83,7 +83,7 @@ export function Home() {
       {data?.pages.map((page, index) => (
         <Grid.Container gap={1} justify="center" wrap="wrap" key={index}>
           {page.data.map((item, index) => (
-            <Grid xs={3.8} key={index}>
+            <Grid xs={6} key={index}>
               <ImageItem
                 url={item.preview_url}
                 onClickImage={() => onClickImage(item.sample_url)}
