@@ -24,7 +24,7 @@ const ImageItem = ({ url, width, height }: ImageProps) => {
       <Card.Body css={{ padding: 0, height: 'fit-content' }}>
         <Image
           showSkeleton
-          src={`http://localhost:3000/?url=${encodeURIComponent(url)}`}
+          src={`https://sankaku.teav4.com/?url=${encodeURIComponent(url)}`}
           maxDelay={10000}
           objectFit="cover"
         />
