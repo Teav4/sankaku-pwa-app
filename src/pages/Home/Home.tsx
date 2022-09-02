@@ -2,12 +2,16 @@ import * as React from 'react'
 import { useFetchIllust, SearchIllustConfigProps } from '@/hooks/useFetchIllust'
 import { Grid, Card, Image, Modal, Button, Text } from '@nextui-org/react'
 import { useInView } from 'react-intersection-observer'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams
+} from 'react-router-dom'
+import { VIEW_IMAGE } from '@/constants/routePath'
 
 interface ImageProps {
   url: string
-  width: number
-  height: number
+  onClickImage: () => void
 }
 
 type SelectOrderValue =
@@ -18,11 +22,12 @@ type SelectOrderValue =
   | 'recently_favorited'
   | 'recently_voted'
 
-const ImageItem = ({ url, width, height }: ImageProps) => {
+const ImageItem = ({ url, onClickImage }: ImageProps) => {
   return (
     <Card css={{ borderRadius: '.5rem' }}>
       <Card.Body css={{ padding: 0, height: 'fit-content' }}>
         <Image
+          onClick={onClickImage}
           showSkeleton
           src={`https://sankaku.teav4.com/?url=${encodeURIComponent(url)}`}
           maxDelay={10000}
@@ -36,6 +41,7 @@ const ImageItem = ({ url, width, height }: ImageProps) => {
 export function Home() {
   const { ref, inView } = useInView()
   const [visible, setVisible] = React.useState(true)
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const tags = searchParams.get('tags')
@@ -57,6 +63,15 @@ export function Home() {
     console.log('close')
   }
 
+  const onClickImage = (url: string) => {
+    navigate({
+      pathname: VIEW_IMAGE,
+      search: createSearchParams({
+        url
+      }).toString()
+    })
+  }
+
   React.useEffect(() => {
     if (inView) {
       fetchNextPage()
@@ -71,8 +86,7 @@ export function Home() {
             <Grid xs={3.8} key={index}>
               <ImageItem
                 url={item.preview_url}
-                width={item.preview_width}
-                height={item.preview_height}
+                onClickImage={() => onClickImage(item.sample_url)}
               />
             </Grid>
           ))}

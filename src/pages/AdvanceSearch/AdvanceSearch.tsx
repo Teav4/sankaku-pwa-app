@@ -60,7 +60,7 @@ export function AdvanceSearch() {
       search: createSearchParams({
         tags: tagsInput,
         order_by: selectedOrderValue(),
-        limit: '20'
+        limit: '10'
       }).toString()
     })
   }
