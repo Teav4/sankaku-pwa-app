@@ -8,6 +8,14 @@ type QueryParams = {
   url: string;
 };
 
+function fileNameFromUrl(url: string) {
+  var matches = url.match(/\/([^\/?#]+)[^\/]*$/) || '';
+  if (matches.length > 1) {
+    return matches[1];
+  }
+  return null;
+}
+
 app.get('/*', (req: Request<{}, {}, {}, QueryParams>, res) => {
   const { url } = req.query
 
@@ -35,6 +43,7 @@ app.get('/*', (req: Request<{}, {}, {}, QueryParams>, res) => {
     }
     if (!err && resp.statusCode === 200){
       res.set("Content-Type", "image/jpeg");
+      res.set('Content-Disposition', `attachment; filename=${fileNameFromUrl(url)}`)
       res.send(resp.body);
     }
   });
